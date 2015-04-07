@@ -1,5 +1,22 @@
 Programming Exercise: Address Book
 ---
+## Instructions for running the web application
+There is nothing different you must do to run the web application. Simply execute "node server.js" 
+and everything should work. 
+
+## Changes/Additional features
+Things changed:
+- added fields in the JSON file for extra info and testing
+- added a search box with an error alert if the name was not found
+- added forwards and backwards search methods
+- rendered profile pics via URL and images "on file"
+- added a simple instruction text at the top of the screen 
+
+There were many things I could have added, such as an auto-complete drop-down list for the search box,
+making the search input case-insensitive, sorting the names in reverse solely by each letter's heading, 
+adding functionality to open your default email with the clicked person's email address in the recipient's text 
+field, etc, but being swamped with current projects at work, I left it fairly simple. 
+
 
 ## Setup
 1. Install NodeJS
