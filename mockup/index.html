@@ -6,72 +6,191 @@
     <title>Address Book Mockup</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,700" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	
+	<script>
+	
+		$(document).ready(function(){
+		
+			var firstLetter = ["A","B","C","D","E","F","G","H","I",
+								"J","K","L","M","N","O","P","Q","R",
+								"S","T","U","V","W","X","Y","Z",
+								];
+			
+			var names = []; //used to store names from json file 
+			$.getJSON("http://localhost:8080/api/people", function(data){
+				//get names from JSON and sort by first name
+				for(i=0; i<data.people.length; i++){
+					if(data.people[i].name){
+						names[i] = data.people[i].name;
+					}
+				}
+				names.sort();
+				addNames();
+				
+				
+				/*************************************************************************/
+				/******** Render the name and info according to the search input *********/
+				/*************************************************************************/
+				var searchButton = document.getElementById("search");
+				searchButton.onclick = function(){searchName(document.getElementById("searchInput").value);};
+				
+				function searchName(searchInput){
+					console.log(searchInput);
+					var indexOfMatch = names.indexOf(searchInput);
+					console.log(indexOfMatch);
+					if(indexOfMatch != -1){ //check if there is a match
+						displayInfo(searchInput);
+					}
+					else{
+						alert("Name was not found. Please make sure spelling is correct and try again.");
+					}
+					
+					document.getElementById("searchInput").value = "";
+				}
+				/************************ End searchName() *******************************/
+				
+				
+				/*************************************************************************/
+				/************ Reverse the order in which the names are listed ************/
+				/*************************************************************************/
+				var sortButton = document.getElementById("sort-ba");
+				sortButton.onclick = function(){sortReverse();};
+				
+				function sortReverse(){
+					document.getElementById("letter").innerHTML = "";
+					firstLetter = firstLetter.reverse();
+					names = names.reverse();
+					addNames();
+				}
+				/************************ End sortReverse() ******************************/
+
+				
+				/*************************************************************************/
+				/**************** Add letter headings and names in order *****************/
+				/*************************************************************************/
+				function addNames(){
+					/* Add the sorted list of names under the correct letter */
+					for(i=0;i<firstLetter.length; i++){ //add letter headings
+						var letterHeadingsDiv = document.createElement('div');
+						letterHeadingsDiv.innerHTML = firstLetter[i];
+						document.getElementById("letter").appendChild(letterHeadingsDiv);
+						for(j=0;j<names.length;j++){ //add names according to first letter of first name
+							if(names[j].charAt(0)==firstLetter[i]){
+								var namesListItem = document.createElement('li');
+								namesListItem.onclick = function(){displayInfo(this.innerHTML);};
+								namesListItem.innerHTML = names[j];
+								document.getElementById("letter").appendChild(namesListItem);
+							}
+						} //end add names for loop
+					} //end letter headings for loop 	
+				}
+				/*************************** End addNames() ******************************/
+				
+				
+				/*************************************************************************/
+				/***** Get the name that was clicked and display contact information *****/
+				/*************************************************************************/
+				function displayInfo(itemClicked){
+				
+					for(k=0; k<names.length; k++){//go through each entry
+						
+						if(itemClicked==data.people[k].name){ 
+						
+							/* Place basic info next to the person's image  */
+							document.getElementById("name-display").innerHTML = data.people[k].name;
+							document.getElementById("field").innerHTML = data.people[k].contactInfo[0].field;
+							document.getElementById("number").innerHTML = data.people[k].contactInfo[0].number;
+							document.getElementById("email").innerHTML = data.people[k].contactInfo[0].email;
+							document.getElementById("profile-pic").innerHTML = "<img src=" + data.people[k].contactInfo[0].profilePicURL + ">";
+							
+							/* Clear (reset) divs every time a name is clicked */
+							document.getElementById("directions").innerHTML = "";
+							document.getElementById("education-dates").innerHTML = "";
+							document.getElementById("school-info").innerHTML = "";
+							document.getElementById("work-dates").innerHTML = "";
+							document.getElementById("company-info").innerHTML = "";
+						
+							/* Get education info to display on right side */
+							for(x=0; x<data.people[k].education.length; x++){
+								var educationDates = document.createElement('div');
+								educationDates.innerHTML = data.people[k].education[x].startYear + "-" + data.people[k].education[x].endYear + "<br><br>";
+								document.getElementById("education-dates").appendChild(educationDates);
+							
+								var schoolName = document.createElement('div');
+								schoolName.innerHTML = "<b>" + data.people[k].education[x].institution;
+								document.getElementById("school-info").appendChild(schoolName);
+							
+								var schoolDegree = document.createElement('div');
+								schoolDegree.innerHTML = data.people[k].education[x].degree;
+								document.getElementById("school-info").appendChild(schoolDegree);	
+							}//end get education info for loop		
+						
+							/* Get experience info to display on right side */
+							for(y=0; y<data.people[k].workExperience.length; y++){//get education info 
+								console.log(data.people[k].name + ": " + data.people[k].workExperience[0].institution);
+								
+								var workDates = document.createElement('div');
+								workDates.innerHTML = data.people[k].workExperience[y].startYear + "-" + data.people[k].workExperience[y].endYear + "<br><br>";
+								document.getElementById("work-dates").appendChild(workDates);
+								
+								var companyName = document.createElement('div');
+								companyName.innerHTML = "<b>" + data.people[k].workExperience[y].institution;
+								document.getElementById("company-info").appendChild(companyName);
+								
+								var jobTitle = document.createElement('div');
+								jobTitle.innerHTML = data.people[k].workExperience[y].title;
+								document.getElementById("company-info").appendChild(jobTitle);
+							}//end get experience info for loop			
+						}//end if itemClicked
+					}//end go through each entry for loop
+				}//end function
+			/*************************** End displayinfo() ***************************/
+
+			
+			}); //end getJSON
+		});			
+
+	</script>
+	
+	
 </head>
 
 <body>
     <div class="app-address-book">
         <!-- LEFT COLUMN -->
-        <div class="app-directory-container">
+        <div id="test" class="app-directory-container">
+			<h3 class="search">Search name:</h3><input class="search-field" id="searchInput" type="text" value=""/>
+			<button id="search" class="button">Search</button><br>
+			<button id="sort-ba" class="button">Reverse Order</button>
             <!-- DIRECTORY COMPONENT -->
             <div class="app-directory">
-                <div class="app-directory-separator">A</div>
-                <div class="app-directory-item">
-                    Adam Wright
-                </div>
-                <div class="app-directory-item">
-                    Alex Watson
-                </div>
-
-                <div class="app-directory-separator">B</div>
-                <div class="app-directory-item">
-                    Blair Michaels
-                </div>
-                <div class="app-directory-item" data-intro="Directory Item" data-position="bottom">
-                    Brent Edwards
-                </div>
-
-                <div class="app-directory-separator">C</div>
-                <div class="app-directory-item">
-                    Charles Nelson
-                </div>
-                <div class="app-directory-item" data-intro="Directory Item" data-position="bottom">
-                    Chris Matthews
-                </div>
-
-                <div class="app-directory-separator">D</div>
-                <div class="app-directory-item">
-                    Damien Tyson
-                </div>
-                <div class="app-directory-item">
-                    Daniel Boone
-                </div>
-                <div class="app-directory-item">
-                    Derek Edwards
-                </div>
-                <div class="app-directory-item" data-intro="Directory Item" data-position="bottom">
-                    Drake Johnson
-                </div>
+				<!-- place holder for letter headings -->
+                <div id="letter" class="app-directory-separator"></div>
             </div>
         </div>
 
         <!-- RIGHT COLUMN -->
         <div class="app-person-profile-container">
+		<p id="directions">To see someone's information, click on a name in the list, or search for a person's name.</p>
             <!-- PERSON PROFILE COMPONENT -->
             <div class="app-person-profile docs-highlight docs-blue" data-intro="Person Profile" data-position="bottom">
                 <!-- PERSON PROFILE HEADER -->
                 <div class="app-person-profile-header">
                     <!-- PHOTO -->
-                    <div class="app-person-profile-photo" style="background-image: url(avatar.png)"></div>
-
-                    <h2>Adam Wright</h2>
-                    <div class="app-person-profile-department">
-                        Strategic Sales
+                    <div id="profile-pic" class="app-person-profile-photo" style="background-image: url(avatar.png)"></div>
+					
+					<!-- place holder for name headings -->
+                    <h2 id="name-display"></h2>
+                    <div id="field" class="app-person-profile-department">
+                        <!-- place holder for specific field of work or study -->
                     </div>
-                    <div class="app-person-profile-phone-number">
-                        919-555-5555
+                    <div id="number" class="app-person-profile-phone-number">
+                        <!-- place holder for phone number -->
                     </div>
-                    <div class="app-person-profile-phone-number">
-                        <a href="mailto:adam.wright@mycompany.com">adam.wright@mycompany.com</a>
+                    <div id="email" class="app-person-profile-phone-number">
+						<!-- place holder for email -->
+                        <!-- <a href="mailto:adam.wright@mycompany.com">adam.wright@mycompany.com</a> -->
                     </div>
                 </div>
 
@@ -82,21 +201,13 @@
                     </div>
                     <div class="app-section-body">
                         <div class="app-history-item">
-                            <div class="app-history-item-dates">
-                                2004-2005
+                            <div id="education-dates" class="app-history-item-dates">
+								<!-- place holder for education dates -->
                             </div>
-                            <div class="app-history-item-body">
-                                <div class="app-history-item-title">NC State University</div>
-                                Master's, Computer Science
-                            </div>
-                        </div>
-                        <div class="app-history-item">
-                            <div class="app-history-item-dates">
-                                2001-2004
-                            </div>
-                            <div class="app-history-item-body">
-                                <div class="app-history-item-title">NC State University</div>
-                                Bachelor's, Computer Science
+                            
+							<div id="school-info" class="app-history-item-body">
+                                <div class="app-history-item-title"><!-- place holder for school name --></div>
+                                <!-- place holder for type of degree -->
                             </div>
                         </div>
                     </div>
@@ -109,21 +220,12 @@
                     </div>
                     <div class="app-section-body">
                         <div class="app-history-item">
-                            <div class="app-history-item-dates">
-                                2001-Present
+                            <div id="work-dates" class="app-history-item-dates">
+                                <!-- place holder for work dates -->
                             </div>
-                            <div class="app-history-item-body">
-                                <div class="app-history-item-title">Megacorp</div>
-                                Software Developer
-                            </div>
-                        </div>
-                        <div class="app-history-item">
-                            <div class="app-history-item-dates">
-                                1980-2001
-                            </div>
-                            <div class="app-history-item-body">
-                                <div class="app-history-item-title">Umbrella Corp</div>
-                                Software Developer
+                            <div id="company-info" class="app-history-item-body">
+                                <div class="app-history-item-title"><!-- place holder for company name --></div>
+                                <!-- place holder for job title -->
                             </div>
                         </div>
                     </div>
