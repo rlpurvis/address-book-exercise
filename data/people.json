@@ -6,7 +6,7 @@
                 {
                     "institution": "NC State University",
                     "startYear": 2001,
-                    "endYear": 2004,
+                    "endYear": "2006",
                     "degree": "Bachelor's, Computer Science"
                 }
             ],
@@ -14,11 +14,57 @@
             "workExperience": [
                 {
                     "institution": "Megacorp",
-                    "startYear": 2001,
+                    "startYear": 2007,
+					"endYear": "2010",
                     "title": "Software Developer"
+                }
+            ],
+			"contactInfo": [
+                {
+                    "field": "Big Data",
+                    "number": "919-867-5309",
+					"email": "awright@megacorp.com",
+					"profilePicURL": "http://assets.bizjournals.com/columbus/user_media/Adam-Wright-1400541*140.jpeg"
                 }
             ]
         },
+		
+		{
+            "name": "Aaron Smith",
+            "education": [
+                {
+                    "institution": "Elon University",
+                    "startYear": 2002,
+                    "endYear": 2006,
+                    "degree": "Political Science"
+                },
+				
+				{
+                    "institution": "NC State University",
+                    "startYear": 1998,
+                    "endYear": 2002,
+                    "degree": "Economics"
+                }
+            ],
+
+            "workExperience": [
+                {
+                    "institution": "White House",
+                    "startYear": 2007,
+					"endYear": 2009,
+                    "title": "Campaign Speaker"
+                }
+            ],
+			"contactInfo": [
+                {
+                    "field": "White House Representative",
+                    "number": "555-555-5555",
+					"email": "importantPerson@whitehouse.gov",
+					"profilePicURL": "aaronsmith.png"
+                }
+            ]
+        },
+		
         {
             "name": "Joe Manfrey",
             "education": [
@@ -35,6 +81,20 @@
                     "institution": "Food Inc.",
                     "startYear": 1998,
                     "title": "Software Developer"
+                },
+				{
+                    "institution": "Sysco",
+                    "startYear": 1995,
+					"endYear": 1998,
+                    "title": "Software Developer"
+                }
+            ],
+			"contactInfo": [
+                {
+                    "field": "UX",
+                    "number": "336-555-1234",
+					"email": "jmanfrey@foodInc.org",
+					"profilePicURL": "http://www.docspot.com/images/n/q/z/v/p/d.png"
                 }
             ]
         },
@@ -51,9 +111,17 @@
 
             "workExperience": [
                 {
-                    "institution": "Food Inc.",
+                    "institution": "NetApp",
                     "startYear": 1998,
                     "title": "Software Developer"
+                }
+            ],
+			"contactInfo": [
+                {
+                    "field": "High Availability",
+                    "number": "919-321-7654",
+					"email": "dcho5@netapp.com",
+					"profilePicURL": "https://media.licdn.com/mpr/mpr/shrink_120_120/p/1/005/0a1/06a/1045127.jpg"
                 }
             ]
         },
@@ -73,6 +141,14 @@
                     "institution": "United Products",
                     "startYear": 1998,
                     "title": "Directory of IT"
+                }
+            ],
+			"contactInfo": [
+                {
+                    "field": "Cloud Computing",
+                    "number": "704-333-3333",
+					"email": "amurray@unitedproducts.com",
+					"profilePicURL": "allisonmurray.jpg"
                 }
             ]
         }
